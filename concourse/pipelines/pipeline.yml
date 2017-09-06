@@ -504,10 +504,8 @@ jobs:
   plan:
   - aggregate:
     - get: gpdb_src
-      trigger: true
     - get: gpaddon_src
     - get: pxf_src
-      trigger: true
     - get: centos-gpdb-dev-6
   - task: compile_gpdb
     file: gpdb_src/concourse/tasks/compile_gpdb.yml
@@ -537,7 +535,6 @@ jobs:
   plan:
   - aggregate:
     - get: gpdb_src
-      trigger: true
     - get: centos-gpdb-dev-6
   - task: compile_gpdb
     file: gpdb_src/concourse/tasks/compile_gpdb_open_source.yml
@@ -549,10 +546,8 @@ jobs:
   plan:
   - aggregate:
     - get: gpdb_src
-      trigger: true
     - get: gpaddon_src
     - get: pxf_src
-      trigger: true
     - get: centos-gpdb-dev-7
   - task: compile_gpdb
     file: gpdb_src/concourse/tasks/compile_gpdb.yml
@@ -581,7 +576,6 @@ jobs:
   plan:
   - aggregate:
     - get: gpdb_src
-      trigger: true
     - get: gpaddon_src
     - get: pxf_src
     - get: sles-gpdb-dev-11-beta
@@ -612,10 +606,15 @@ jobs:
   - aggregate:
     - get: gpdb_src
       trigger: true
+      tags: ["gpdb5_wix_external_worker"]
     - get: gpaddon_src
+      tags: ["gpdb5_wix_external_worker"]
     - get: pxf_src
+      tags: ["gpdb5_wix_external_worker"]
     - get: centos-mingw
+      tags: ["gpdb5_wix_external_worker"]
   - task: compile_gpdb
+    tags: ["gpdb5_wix_external_worker"]
     file: gpdb_src/concourse/tasks/compile_gpdb.yml
     image: centos-mingw
     params:
@@ -628,9 +627,11 @@ jobs:
       IVYREPO_PASSWD: {{ivyrepo_passwd}}
   - aggregate:
     - put: bin_gpdb_windows_clients
+      tags: ["gpdb5_wix_external_worker"]
       params:
         file: gpdb_artifacts/greenplum-clients-*-WinXP-x86_32.msi
     - put: bin_gpdb_windows_loaders
+      tags: ["gpdb5_wix_external_worker"]
       params:
         file: gpdb_artifacts/greenplum-loaders-*-WinXP-x86_32.msi
 
@@ -643,7 +644,6 @@ jobs:
   - aggregate:
     - get: gpdb_src
       resource: gpdb_src_binary_swap
-      trigger: true
     - get: gpaddon_src
     - get: pxf_src
     - get: centos-gpdb-dev-6
